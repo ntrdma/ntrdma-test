@@ -32,7 +32,10 @@ ntrdma-lib:
 	cp $(NTRDMA_LIB_PATH)/ntrdma.driver $(INSTALL_PATH)/etc/libibverbs.d
 
 deploy:
-	#./deploy.sh root@192.168.122.10 $(LX_VERS)
+	mkdir -p $(INSTALL_PATH){,/etc/modprobe.d}
+	cp modprobe.d/{,node_1/}*.conf $(INSTALL_PATH)/etc/modprobe.d
+	./deploy.sh root@192.168.122.10 $(LX_VERS)
+	cp modprobe.d/{,node_2/}*.conf $(INSTALL_PATH)/etc/modprobe.d
 	./deploy.sh root@192.168.122.20 $(LX_VERS)
 
 .PHONY: all ntrdma ntrdma-lib deploy
