@@ -11,7 +11,7 @@ all: ntrdma ntrdma-lib
 
 ntrdma:
 	cp config-ntrdma $(NTRDMA_PATH)/.config
-	mkdir -p $(INSTALL_PATH)/{,boot,lib/modules}
+	mkdir -p $(INSTALL_PATH){,/boot,/lib/modules}
 	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) olddefconfig
 	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS)
 	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) modules_install
@@ -20,17 +20,19 @@ ntrdma:
 	cp $(NTRDMA_PATH)/.config $(INSTALL_PATH)/boot/config-$(LX_VERS)
 
 ntrdma-lib:
-	cd $(NTRDMA_LIB_PATH) && libtoolize
-	cd $(NTRDMA_LIB_PATH) && aclocal
-	cd $(NTRDMA_LIB_PATH) && autoconf
-	cd $(NTRDMA_LIB_PATH) && autoheader
-	cd $(NTRDMA_LIB_PATH) && automake --add-missing
-	cd $(NTRDMA_LIB_PATH) && ./configure --libdir=/usr/lib64 --sysconfdir=/etc
-	$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS)
-	$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS) install
+	mkdir -p $(INSTALL_PATH){,/usr/lib64,/etc/libibverbs.d}
+	#cd $(NTRDMA_LIB_PATH) && libtoolize
+	#cd $(NTRDMA_LIB_PATH) && aclocal
+	#cd $(NTRDMA_LIB_PATH) && autoconf
+	#cd $(NTRDMA_LIB_PATH) && autoheader
+	#cd $(NTRDMA_LIB_PATH) && automake --add-missing
+	#cd $(NTRDMA_LIB_PATH) && ./configure --libdir=/usr/lib64 --sysconfdir=/etc
+	#$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS)
+	#$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS) install
+	cp $(NTRDMA_LIB_PATH)/ntrdma.driver $(INSTALL_PATH)/etc/libibverbs.d
 
 deploy:
-	deploy.sh 192.168.122.10
-	deploy.sh 192.168.122.11
+	#./deploy.sh root@192.168.122.10 $(LX_VERS)
+	./deploy.sh root@192.168.122.20 $(LX_VERS)
 
 .PHONY: all ntrdma ntrdma-lib deploy
