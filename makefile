@@ -21,14 +21,14 @@ ntrdma:
 
 ntrdma-lib:
 	mkdir -p $(INSTALL_PATH){,/usr/lib64,/etc/libibverbs.d}
-	#cd $(NTRDMA_LIB_PATH) && libtoolize
-	#cd $(NTRDMA_LIB_PATH) && aclocal
-	#cd $(NTRDMA_LIB_PATH) && autoconf
-	#cd $(NTRDMA_LIB_PATH) && autoheader
-	#cd $(NTRDMA_LIB_PATH) && automake --add-missing
-	#cd $(NTRDMA_LIB_PATH) && ./configure --libdir=/usr/lib64 --sysconfdir=/etc
-	#$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS)
-	#$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS) install
+	cd $(NTRDMA_LIB_PATH) && libtoolize
+	cd $(NTRDMA_LIB_PATH) && aclocal
+	cd $(NTRDMA_LIB_PATH) && autoconf
+	cd $(NTRDMA_LIB_PATH) && autoheader
+	cd $(NTRDMA_LIB_PATH) && automake --add-missing
+	cd $(NTRDMA_LIB_PATH) && ./configure --libdir=/usr/lib64 --sysconfdir=/etc
+	$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS)
+	$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS) install
 	cp $(NTRDMA_LIB_PATH)/ntrdma.driver $(INSTALL_PATH)/etc/libibverbs.d
 
 deploy:
