@@ -1,0 +1,6 @@
+.*
+ntrdma
+ntrdma-lib
+install
+
+!.gitignore
