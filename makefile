@@ -1,3 +1,6 @@
+HOST1		= root@192.168.122.10
+HOST2		= root@192.168.122.20
+
 INSTALL_PATH	= $(CURDIR)/install
 NTRDMA_PATH	= $(CURDIR)/ntrdma
 NTRDMA_LIB_PATH	= $(CURDIR)/ntrdma-lib
@@ -42,14 +45,14 @@ ntrdma-lib:
 deploy-files:
 	mkdir -p $(INSTALL_PATH){,/etc/modprobe.d}
 	cp modprobe.d/{,node_1/}*.conf $(INSTALL_PATH)/etc/modprobe.d
-	./deploy-files.sh root@192.168.122.10 $(LX_VERS)
+	./deploy-files.sh $(HOST1) $(LX_VERS)
 	cp modprobe.d/{,node_2/}*.conf $(INSTALL_PATH)/etc/modprobe.d
-	./deploy-files.sh root@192.168.122.20 $(LX_VERS)
+	./deploy-files.sh $(HOST2) $(LX_VERS)
 
 deploy-bootstrap:
-	./deploy-bootstrap.sh root@192.168.122.10 $(LX_VERS)
-	./deploy-bootstrap.sh root@192.168.122.20 $(LX_VERS)
+	./deploy-bootstrap.sh $(HOST1) $(LX_VERS)
+	./deploy-bootstrap.sh $(HOST2) $(LX_VERS)
 
 deploy: deploy-files deploy-bootstrap
 
-.PHONY: all ntrdma ntrdma-lib deploy
+.PHONY: all ntrdma ntrdma-ext ntrdma-lib deploy-files deploy-bootstrap deploy
