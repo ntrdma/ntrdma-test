@@ -19,6 +19,14 @@ ntrdma:
 	cp $(NTRDMA_PATH)/System.map $(INSTALL_PATH)/boot/System.map-$(LX_VERS)
 	cp $(NTRDMA_PATH)/.config $(INSTALL_PATH)/boot/config-$(LX_VERS)
 
+ntrdma-ext:
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/ntb
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/ntb modules_install
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/ntc
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/ntc modules_install
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/infiniband
+	$(MAKE) -C $(NTRDMA_PATH) $(LX_OPTS) M=drivers/infiniband modules_install
+
 ntrdma-lib:
 	mkdir -p $(INSTALL_PATH){,/usr/lib64,/etc/libibverbs.d}
 	cd $(NTRDMA_LIB_PATH) && libtoolize
@@ -31,11 +39,17 @@ ntrdma-lib:
 	$(MAKE) -C $(NTRDMA_LIB_PATH) $(AM_OPTS) install
 	cp $(NTRDMA_LIB_PATH)/ntrdma.driver $(INSTALL_PATH)/etc/libibverbs.d
 
-deploy:
+deploy-files:
 	mkdir -p $(INSTALL_PATH){,/etc/modprobe.d}
 	cp modprobe.d/{,node_1/}*.conf $(INSTALL_PATH)/etc/modprobe.d
-	./deploy.sh root@192.168.122.10 $(LX_VERS)
+	./deploy-files.sh root@192.168.122.10 $(LX_VERS)
 	cp modprobe.d/{,node_2/}*.conf $(INSTALL_PATH)/etc/modprobe.d
-	./deploy.sh root@192.168.122.20 $(LX_VERS)
+	./deploy-files.sh root@192.168.122.20 $(LX_VERS)
+
+deploy-bootstrap:
+	./deploy-bootstrap.sh root@192.168.122.10 $(LX_VERS)
+	./deploy-bootstrap.sh root@192.168.122.20 $(LX_VERS)
+
+deploy: deploy-files deploy-bootstrap
 
 .PHONY: all ntrdma ntrdma-lib deploy
